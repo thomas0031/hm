@@ -1,7 +1,6 @@
 #include "HashMap.h"
 
 #include <stdlib.h>
-#include <stdint.h>
 
 #define INITIAL_CAPACITY 16
 
@@ -17,6 +16,8 @@ struct Node {
 
 struct _HashMap
 {
+    hash_func hash_f;
+    cmp_func cmp_f;
     size_t size;
     size_t cap;
     Node *buckets;
@@ -33,16 +34,18 @@ static void HashMap_put(HashMap *self, const void *key, const void *value)
     // ...
 }
 
-HashMap *HashMap_new()
+HashMap *HashMap_new(hash_func hash_f, cmp_func cmp_f)
 {
     HashMap *hm = malloc(sizeof(HashMap) + sizeof(_HashMap));
     hm->get = HashMap_get;
     hm->put = HashMap_put;
 
     _HashMap *_hm = (_HashMap*)(hm + 1);
+    _hm->hash_f = hash_f;
+    _hm->cmp_f = cmp_f;
     _hm->size = 0;
     _hm->cap = INITIAL_CAPACITY;
-    _hm->buckets = calloc(_hm->cap, sizeof(Node));
+    _hm->buckets = malloc(_hm->cap * sizeof(Node));
 
     return hm;
 }

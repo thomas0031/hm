@@ -2,7 +2,7 @@
 
 int main(void)
 {
-    HashMap *hm = HashMap_new();
+    HashMap *hm = HashMap_new(0, 0);
 
     hm->put(hm, "key1", "value1");
     hm->get(hm, "key1");
